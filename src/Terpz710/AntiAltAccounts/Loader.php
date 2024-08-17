@@ -23,12 +23,13 @@ class Loader extends PluginBase implements Listener {
         $this->saveIP($ip, $player->getName());
 
         if ($this->isAltIP($ip, $player->getName())) {
+            $reason = $this->getConfig()->get("Ban-Reason");
             $banDuration = $this->getConfig()->get("Ban-Duration");
 
             $expirationTime = $banDuration !== null ? time() + (int)$banDuration : null;
 
             $player->kick($this->getConfig()->get("Ban-Message"));
-            $this->getServer()->getNameBans()->addBan($ip, "Alt Account Detected", $expirationTime, $player->getName());
+            $this->getServer()->getNameBans()->addBan($ip, $reason, $expirationTime, $player->getName());
         }
     }
 
