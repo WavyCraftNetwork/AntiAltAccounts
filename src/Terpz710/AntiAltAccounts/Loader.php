@@ -11,7 +11,7 @@ use pocketmine\utils\Config;
 
 class Loader extends PluginBase implements Listener {
 
-    public function onEnable(): void{
+    public function onEnable(): void {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
     }
@@ -23,8 +23,12 @@ class Loader extends PluginBase implements Listener {
         $this->saveIP($ip, $player->getName());
 
         if ($this->isAltIP($ip, $player->getName())) {
+            $banDuration = $this->getConfig()->get("Ban-Duration");
+
+            $expirationTime = $banDuration !== null ? time() + (int)$banDuration : null;
+
             $player->kick($this->getConfig()->get("Ban-Message"));
-            $this->getServer()->getNameBans()->addBan($ip, "Alt Account Detected", NULL, $player->getName());
+            $this->getServer()->getNameBans()->addBan($ip, "Alt Account Detected", $expirationTime, $player->getName());
         }
     }
 
@@ -38,6 +42,6 @@ class Loader extends PluginBase implements Listener {
 
     private function isAltIP(string $ip, string $playerName): bool {
         $data = new Config($this->getDataFolder() . "ip_data.json", Config::JSON);
-        return $data->exists($ip) !== false && $data->get($ip) !== $playerName;
+        return $data->exists($ip) && $data->get($ip) !== $playerName;
     }
 }
