@@ -2,3 +2,12 @@
 
 # Ban message
 Ban-Message: "Alts are not allowed here!"
+
+# Ban reason
+Ban-Reason: "Alt Account Detected"
+
+# Ban Duration
+# NULL = Permanent Ban
+# Format is in seconds
+# 60 = 1 minute
+Ban-Duration: 60
